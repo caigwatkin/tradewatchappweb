@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Menu, toaster } from 'evergreen-ui'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Menu>
+      <Menu.Group>
+        <Menu.Item
+          onSelect={() =>
+            toaster.success('Signed in', {
+              description: 'You are now signed in to Trade Me',
+            })
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          Sign in to Trade Me
+        </Menu.Item>
+      </Menu.Group>
+    </Menu>
+  )
 }
 
-export default App;
+export default App

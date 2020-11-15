@@ -3,19 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.1.2",
-    "@testing-library/user-event": "^12.2.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "@testing-library/jest-dom": "5.11.6",
+    "@testing-library/react": "11.1.2",
+    "@testing-library/user-event": "12.2.2",
+    "evergreen-ui": "5.1.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
     "react-scripts": "4.0.0",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fmt": "prettier --write *.{js,css}; eslint --cache --fix *.js",
+    "postinstall": "husky install",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +37,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "7.13.0",
+    "eslint-plugin-react": "^7.21.5",
+    "husky": "5.0.0-beta.0",
+    "lint-staged": "10.5.1",
+    "prettier": "2.1.2"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css}": "prettier --write"
   }
 }
