@@ -1,20 +1,46 @@
-import { Menu, toaster } from 'evergreen-ui'
+import { Pane, Text } from 'evergreen-ui'
+import React from 'react'
+import { PADDING } from '../../layoutConstants'
 
 function App() {
   return (
-    <Menu>
-      <Menu.Group>
-        <Menu.Item
-          onSelect={() =>
-            toaster.success('Signed in', {
-              description: 'You are now signed in to Trade Me',
-            })
-          }
+    <Pane
+      display={'flex'}
+      flexDirection={'column'}
+      height={'100%'}
+      padding={PADDING}
+      width={'100%'}
+    >
+      <Pane
+        alignItems={'center'}
+        background={'tint2'}
+        display={'flex'}
+        float={'left'}
+        justifyContent={'center'}
+        padding={PADDING}
+      >
+        <Text>Header</Text>
+      </Pane>
+
+      <Pane
+        display={'flex'}
+        flexDirection={'column'}
+        padding={PADDING}
+        width={'100%'}
+      >
+        <Pane
+          alignItems={'center'}
+          background={'tint1'}
+          display={'flex'}
+          flexDirection={'column'}
+          justifyContent={'center'}
+          padding={PADDING}
         >
-          Sign in to Trade Me
-        </Menu.Item>
-      </Menu.Group>
-    </Menu>
+          <Text>Content</Text>
+          <Text>Something else</Text>
+        </Pane>
+      </Pane>
+    </Pane>
   )
 }
 

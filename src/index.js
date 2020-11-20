@@ -1,12 +1,35 @@
+import App from './components/app/app'
+import Sidebar from './components/sidebar/sidebar'
+import { Pane } from 'evergreen-ui'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/app/app'
 import reportWebVitals from './reportWebVitals'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Pane display={'flex'} height={'98vh'}>
+      <Pane
+        border={'default'}
+        display={'flex'}
+        float={'left'}
+        height={'100%'}
+        width={'20%'}
+      >
+        <Sidebar />
+      </Pane>
+
+      <Pane
+        border={'default'}
+        display={'flex'}
+        float={'left'}
+        height={'100%'}
+        width={'80%'}
+      >
+        <App />
+      </Pane>
+    </Pane>
   </React.StrictMode>,
+
   document.getElementById('root')
 )
 
