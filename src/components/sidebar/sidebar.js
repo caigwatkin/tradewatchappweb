@@ -1,20 +1,57 @@
+import { connect } from 'react-redux'
 import { Heading, Menu, Pane, toaster } from 'evergreen-ui'
 import { PADDING } from '../../layoutConstants'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { TEXT } from './constants'
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { USER_SIGN_IN, USER_SIGN_OUT } from '../../actions/constants'
 
-function Sidebar() {
-  const [signedIn, setSignedIn] = useState(false)
-  const handleSignIn = () => {
-    if (signedIn) {
-      toaster.warning(TEXT.SIGN_OUT_SUCCESS_TOAST_TITLE)
-    } else {
+const propTypes = {
+  signInUser: PropTypes.func.isRequired,
+  signOutUser: PropTypes.func.isRequired,
+  user: PropTypes.object,
+  userSignInPending: PropTypes.bool.isRequired,
+  userSignOutPending: PropTypes.bool.isRequired,
+}
+
+function Sidebar(props) {
+  const {
+    signInUser,
+    signOutUser,
+    user,
+    userSignInPending,
+    userSignOutPending,
+  } = props
+
+  useEffect(() => {
+    if (user) {
       toaster.success(TEXT.SIGN_IN_SUCCESS_TOAST_TITLE, {
-        description: TEXT.SIGN_IN_SUCCESS_TOAST_DESCRIPTION,
+        description: user.uid,
       })
+    } else {
+      toaster.warning(TEXT.SIGN_OUT_SUCCESS_TOAST_TITLE) // TODO: make more elegant, since this will display on component mount
     }
-    setSignedIn(!signedIn)
+  }, [user])
+
+  useEffect(() => {
+    if (userSignInPending) {
+      toaster.notify(TEXT.SIGN_IN_PENDING_TOAST_TITLE)
+    }
+  }, [userSignInPending])
+
+  useEffect(() => {
+    if (userSignOutPending) {
+      toaster.notify(TEXT.SIGN_OUT_PENDING_TOAST_TITLE)
+    }
+  }, [userSignOutPending])
+
+  const handleSignInOrOut = () => {
+    if (user) {
+      signOutUser()
+    } else {
+      signInUser()
+    }
   }
 
   return (
@@ -40,8 +77,8 @@ function Sidebar() {
       <Pane>
         <Menu>
           <Menu.Group>
-            <Menu.Item onSelect={handleSignIn}>
-              {signedIn ? TEXT.SIGN_OUT_MENU_ITEM : TEXT.SIGN_IN_MENU_ITEM}
+            <Menu.Item onSelect={handleSignInOrOut}>
+              {user ? TEXT.SIGN_OUT_MENU_ITEM : TEXT.SIGN_IN_MENU_ITEM}
             </Menu.Item>
 
             <Menu.Item
@@ -60,4 +97,30 @@ function Sidebar() {
   )
 }
 
-export default Sidebar
+Sidebar.propTypes = propTypes
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    userSignInPending: state.user.userSignInPending,
+    userSignOutPending: state.user.userSignOutPending,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signInUser: () => {
+      dispatch({
+        type: USER_SIGN_IN,
+      })
+    },
+    signOutUser: (user) => {
+      dispatch({
+        type: USER_SIGN_OUT,
+        user: user,
+      })
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
