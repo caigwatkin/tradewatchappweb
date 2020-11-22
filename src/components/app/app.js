@@ -1,6 +1,7 @@
-import { Pane, Text } from 'evergreen-ui'
+import { Pane, Text, toaster } from 'evergreen-ui'
 import React from 'react'
 import { PADDING } from '../../layoutConstants'
+import { TEXT } from './constants'
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         justifyContent={'center'}
         padding={PADDING}
       >
-        <Text>Header</Text>
+        <Text>{TEXT.HEADER}</Text>
       </Pane>
 
       <Pane
@@ -34,10 +35,10 @@ function App() {
           display={'flex'}
           flexDirection={'column'}
           justifyContent={'center'}
+          onClick={() => toaster.notify(TEXT.CONTENT_INTERACTION_TOAST_TITLE)}
           padding={PADDING}
         >
-          <Text>Content</Text>
-          <Text>Something else</Text>
+          <Text>{TEXT.CONTENT}</Text>
         </Pane>
       </Pane>
     </Pane>

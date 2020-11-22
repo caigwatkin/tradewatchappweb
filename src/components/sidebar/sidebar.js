@@ -18,6 +18,7 @@ function Sidebar() {
         display={'flex'}
         float={'left'}
         justifyContent={'center'}
+        onClick={() => toaster.success(TEXT.LOGO_TOAST_TITLE)}
         padding={PADDING}
       >
         <Heading>{TEXT.LOGO}</Heading>
@@ -33,7 +34,7 @@ function Sidebar() {
                 })
               }
             >
-              {TEXT.SIGN_IN}
+              {TEXT.SIGN_IN_MENU_ITEM}
             </Menu.Item>
 
             <Menu.Item
@@ -43,7 +44,7 @@ function Sidebar() {
                 })
               }
             >
-              {TEXT.HELP}
+              {TEXT.HELP_MENU_ITEM}
             </Menu.Item>
           </Menu.Group>
         </Menu>
