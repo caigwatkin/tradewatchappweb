@@ -14,21 +14,31 @@ describe('render defaults', () => {
     userEvent.click(logo)
 
     await waitFor(() => {
-      const toast = screen.getByText(TEXT.LOGO_TOAST_TITLE)
+      const toast = screen.getByText(TEXT.LOGO_SUCCESS_TOAST_TITLE)
       return expect(toast).toBeInTheDocument()
     })
   })
 
-  test('clicking on sign in menu item renders toast', async () => {
+  test('clicking on sign in or out menu item signs user in or out', async () => {
     render(<Sidebar />)
 
-    const menuItem = screen.getByText(TEXT.SIGN_IN_MENU_ITEM)
-    expect(menuItem).toBeInTheDocument()
+    const menuItemSignIn = screen.getByText(TEXT.SIGN_IN_MENU_ITEM)
+    expect(menuItemSignIn).toBeInTheDocument()
 
-    userEvent.click(menuItem)
+    userEvent.click(menuItemSignIn)
 
     await waitFor(() => {
-      const toast = screen.getByText(TEXT.SIGNED_IN_TOAST_TITLE)
+      const toast = screen.getByText(TEXT.SIGN_IN_SUCCESS_TOAST_TITLE)
+      return expect(toast).toBeInTheDocument()
+    })
+
+    const menuItemSignOut = screen.getByText(TEXT.SIGN_OUT_MENU_ITEM)
+    expect(menuItemSignOut).toBeInTheDocument()
+
+    userEvent.click(menuItemSignOut)
+
+    await waitFor(() => {
+      const toast = screen.getByText(TEXT.SIGN_OUT_SUCCESS_TOAST_TITLE)
       return expect(toast).toBeInTheDocument()
     })
   })
@@ -42,7 +52,7 @@ describe('render defaults', () => {
     userEvent.click(menuItem)
 
     await waitFor(() => {
-      const toast = screen.getByText(TEXT.HELPED_TOAST_TITLE)
+      const toast = screen.getByText(TEXT.HELP_SUCCESS_TOAST_TITLE)
       return expect(toast).toBeInTheDocument()
     })
   })

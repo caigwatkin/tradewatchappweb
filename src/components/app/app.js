@@ -35,7 +35,7 @@ function App() {
           display={'flex'}
           flexDirection={'column'}
           justifyContent={'center'}
-          onClick={() => toaster.notify(TEXT.CONTENT_INTERACTION_TOAST_TITLE)}
+          onClick={() => toaster.notify(TEXT.CONTENT_SUCCESS_TOAST_TITLE)}
           padding={PADDING}
         >
           <Text>{TEXT.CONTENT}</Text>

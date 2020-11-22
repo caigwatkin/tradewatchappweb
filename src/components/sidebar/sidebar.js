@@ -2,8 +2,21 @@ import { Heading, Menu, Pane, toaster } from 'evergreen-ui'
 import { PADDING } from '../../layoutConstants'
 import React from 'react'
 import { TEXT } from './constants'
+import { useState } from 'react'
 
 function Sidebar() {
+  const [signedIn, setSignedIn] = useState(false)
+  const handleSignIn = () => {
+    if (signedIn) {
+      toaster.warning(TEXT.SIGN_OUT_SUCCESS_TOAST_TITLE)
+    } else {
+      toaster.success(TEXT.SIGN_IN_SUCCESS_TOAST_TITLE, {
+        description: TEXT.SIGN_IN_SUCCESS_TOAST_DESCRIPTION,
+      })
+    }
+    setSignedIn(!signedIn)
+  }
+
   return (
     <Pane
       background={'tint2'}
@@ -18,7 +31,7 @@ function Sidebar() {
         display={'flex'}
         float={'left'}
         justifyContent={'center'}
-        onClick={() => toaster.success(TEXT.LOGO_TOAST_TITLE)}
+        onClick={() => toaster.success(TEXT.LOGO_SUCCESS_TOAST_TITLE)}
         padding={PADDING}
       >
         <Heading>{TEXT.LOGO}</Heading>
@@ -27,20 +40,14 @@ function Sidebar() {
       <Pane>
         <Menu>
           <Menu.Group>
-            <Menu.Item
-              onSelect={() =>
-                toaster.success(TEXT.SIGNED_IN_TOAST_TITLE, {
-                  description: TEXT.SIGNED_IN_TOAST_DESCRIPTION,
-                })
-              }
-            >
-              {TEXT.SIGN_IN_MENU_ITEM}
+            <Menu.Item onSelect={handleSignIn}>
+              {signedIn ? TEXT.SIGN_OUT_MENU_ITEM : TEXT.SIGN_IN_MENU_ITEM}
             </Menu.Item>
 
             <Menu.Item
               onSelect={() =>
-                toaster.warning(TEXT.HELPED_TOAST_TITLE, {
-                  description: TEXT.HELPED_TOAST_DESCRIPTION,
+                toaster.warning(TEXT.HELP_SUCCESS_TOAST_TITLE, {
+                  description: TEXT.HELP_SUCCESS_TOAST_DESCRIPTION,
                 })
               }
             >
