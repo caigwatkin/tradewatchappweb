@@ -5,7 +5,10 @@ import { render, screen } from '@testing-library/react'
 import Sidebar from '../sidebar'
 import { TEXT } from '../constants'
 import userEvent from '@testing-library/user-event'
-import { USER_SIGN_IN, USER_SIGN_OUT } from '../../../actions/constants'
+import {
+  TRADEME_USER_SIGN_IN,
+  TRADEME_USER_SIGN_OUT,
+} from '../../../actions/trademe'
 import { waitFor } from '@testing-library/react'
 
 const renderComponent = (component, mocks) => {
@@ -27,11 +30,10 @@ const renderComponent = (component, mocks) => {
   return render(component, { wrapper: Wrapper })
 }
 
-describe('render defaults', () => {
+describe('handle user interactions and possible states', () => {
   const MOCK_STORE = {
-    user: {
-      userSignInPending: false,
-      userSignOutPending: false,
+    trademe: {
+      trademeUserSignInPending: false,
     },
   }
 
@@ -63,16 +65,31 @@ describe('render defaults', () => {
     userEvent.click(menuItem)
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: USER_SIGN_IN,
+      type: TRADEME_USER_SIGN_IN,
     })
+  })
+
+  test('sign in error renders toast', async () => {
+    const mockStore = {
+      ...MOCK_STORE,
+      trademe: {
+        ...MOCK_STORE.trademe,
+        trademeUserSignInError: {},
+      },
+    }
+
+    renderComponent(<Sidebar />, { store: mockStore })
+
+    const toast = screen.getByText(TEXT.SIGN_IN_ERROR_TOAST_TITLE)
+    expect(toast).toBeInTheDocument()
   })
 
   test('sign in pending renders toast', async () => {
     const mockStore = {
       ...MOCK_STORE,
-      user: {
-        ...MOCK_STORE.user,
-        userSignInPending: true,
+      trademe: {
+        ...MOCK_STORE.trademe,
+        trademeUserSignInPending: true,
       },
     }
 
@@ -82,14 +99,15 @@ describe('render defaults', () => {
     expect(toast).toBeInTheDocument()
   })
 
-  test('clicking on sign out dispatches sign out', async () => {
+  test('sign in success toast rendered when trademeUser exists and clicking on sign out dispatches sign out', async () => {
     const mockDispatch = jest.fn()
 
+    const trademeUser = 'TRADEME_USER'
     const mockStore = {
       ...MOCK_STORE,
-      user: {
-        ...MOCK_STORE.user,
-        user: {},
+      trademe: {
+        ...MOCK_STORE.trademe,
+        trademeUser: trademeUser,
       },
     }
 
@@ -98,29 +116,17 @@ describe('render defaults', () => {
     const toast = screen.getByText(TEXT.SIGN_IN_SUCCESS_TOAST_TITLE)
     expect(toast).toBeInTheDocument()
 
+    const trademeUserElement = screen.getByText(trademeUser)
+    expect(trademeUserElement).toBeInTheDocument()
+
     const menuItem = screen.getByText(TEXT.SIGN_OUT_MENU_ITEM)
     expect(menuItem).toBeInTheDocument()
 
     userEvent.click(menuItem)
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: USER_SIGN_OUT,
+      type: TRADEME_USER_SIGN_OUT,
     })
-  })
-
-  test('sign out pending renders toast', async () => {
-    const mockStore = {
-      ...MOCK_STORE,
-      user: {
-        ...MOCK_STORE.user,
-        userSignOutPending: true,
-      },
-    }
-
-    renderComponent(<Sidebar />, { store: mockStore })
-
-    const toast = screen.getByText(TEXT.SIGN_OUT_PENDING_TOAST_TITLE)
-    expect(toast).toBeInTheDocument()
   })
 
   test('clicking on help menu item renders toast', async () => {

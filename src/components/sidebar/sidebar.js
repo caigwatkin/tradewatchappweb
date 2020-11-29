@@ -5,52 +5,55 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { TEXT } from './constants'
 import { useEffect } from 'react'
-import { USER_SIGN_IN, USER_SIGN_OUT } from '../../actions/constants'
+import {
+  TRADEME_USER_SIGN_IN,
+  TRADEME_USER_SIGN_OUT,
+} from '../../actions/trademe'
 
 const propTypes = {
-  signInUser: PropTypes.func.isRequired,
-  signOutUser: PropTypes.func.isRequired,
-  user: PropTypes.object,
-  userSignInPending: PropTypes.bool.isRequired,
-  userSignOutPending: PropTypes.bool.isRequired,
+  trademeUserSignIn: PropTypes.func.isRequired,
+  trademeUserSignOut: PropTypes.func.isRequired,
+  trademeUser: PropTypes.string,
+  trademeUserSignInError: PropTypes.object,
+  trademeUserSignInPending: PropTypes.bool.isRequired,
 }
 
 function Sidebar(props) {
   const {
-    signInUser,
-    signOutUser,
-    user,
-    userSignInPending,
-    userSignOutPending,
+    trademeUser,
+    trademeUserSignIn,
+    trademeUserSignInError,
+    trademeUserSignInPending,
+    trademeUserSignOut,
   } = props
 
   useEffect(() => {
-    if (user) {
+    if (trademeUser) {
       toaster.success(TEXT.SIGN_IN_SUCCESS_TOAST_TITLE, {
-        description: user.uid,
+        description: trademeUser,
       })
     } else {
       toaster.warning(TEXT.SIGN_OUT_SUCCESS_TOAST_TITLE) // TODO: make more elegant, since this will display on component mount
     }
-  }, [user])
+  }, [trademeUser])
 
   useEffect(() => {
-    if (userSignInPending) {
+    if (trademeUserSignInError) {
+      toaster.danger(TEXT.SIGN_IN_ERROR_TOAST_TITLE)
+    }
+  }, [trademeUserSignInError])
+
+  useEffect(() => {
+    if (trademeUserSignInPending) {
       toaster.notify(TEXT.SIGN_IN_PENDING_TOAST_TITLE)
     }
-  }, [userSignInPending])
-
-  useEffect(() => {
-    if (userSignOutPending) {
-      toaster.notify(TEXT.SIGN_OUT_PENDING_TOAST_TITLE)
-    }
-  }, [userSignOutPending])
+  }, [trademeUserSignInPending])
 
   const handleSignInOrOut = () => {
-    if (user) {
-      signOutUser()
+    if (trademeUser) {
+      trademeUserSignOut()
     } else {
-      signInUser()
+      trademeUserSignIn()
     }
   }
 
@@ -78,7 +81,7 @@ function Sidebar(props) {
         <Menu>
           <Menu.Group>
             <Menu.Item onSelect={handleSignInOrOut}>
-              {user ? TEXT.SIGN_OUT_MENU_ITEM : TEXT.SIGN_IN_MENU_ITEM}
+              {trademeUser ? TEXT.SIGN_OUT_MENU_ITEM : TEXT.SIGN_IN_MENU_ITEM}
             </Menu.Item>
 
             <Menu.Item
@@ -101,23 +104,22 @@ Sidebar.propTypes = propTypes
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.user,
-    userSignInPending: state.user.userSignInPending,
-    userSignOutPending: state.user.userSignOutPending,
+    trademeUser: state.trademe.trademeUser,
+    trademeUserSignInError: state.trademe.trademeUserSignInError,
+    trademeUserSignInPending: state.trademe.trademeUserSignInPending,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signInUser: () => {
+    trademeUserSignIn: () => {
       dispatch({
-        type: USER_SIGN_IN,
+        type: TRADEME_USER_SIGN_IN,
       })
     },
-    signOutUser: (user) => {
+    trademeUserSignOut: () => {
       dispatch({
-        type: USER_SIGN_OUT,
-        user: user,
+        type: TRADEME_USER_SIGN_OUT,
       })
     },
   }

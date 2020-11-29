@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import user from './user'
+import trademe from './trademe'
 
 const combinedReducer = combineReducers({
-  user: user,
+  trademe: trademe,
 })
 
 const rootReducer = (state, action) => {
